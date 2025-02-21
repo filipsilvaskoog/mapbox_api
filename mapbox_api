@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Välj en plats</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { width: 100%; height: 500px; }
+        #info { padding: 10px; background: white; position: absolute; top: 10px; left: 10px; z-index: 1; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="info">Klicka på kartan för att välja en plats</div>
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = "pk.eyJ1IjoiZmlsaXBzaWx2YXNrb29nIiwiYSI6ImNtN2Y0dzE3eDBpbmkyaXF3ZTZ2bXEwbTIifQ.ZUtdExGO2RA3Xh9hWISJpA";
+        const map = new mapboxgl.Map({
+            container: "map",
+            style: "mapbox://styles/mapbox/streets-v11",
+            center: [18.0686, 59.3293], // Stockholm som startpunkt
+            zoom: 10
+        });
+
+        let marker;
+
+        map.on("click", (event) => {
+            const lng = event.lngLat.lng.toFixed(6);
+            const lat = event.lngLat.lat.toFixed(6);
+
+            if (marker) {
+                marker.remove();
+            }
+
+            marker = new mapboxgl.Marker()
+                .setLngLat([lng, lat])
+                .addTo(map);
+
+            document.getElementById("info").innerText = `Vald plats: ${lat}, ${lng}`;
+        });
+    </script>
+</body>
+</html>
